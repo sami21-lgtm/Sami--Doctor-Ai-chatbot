@@ -4,7 +4,7 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    // আপনার আসল API Key থাকবে সার্ভারের এনভারনমেন্ট ভ্যারিয়েবলে (Environment Variable)
+    
     const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
     if (!GROQ_API_KEY) {
