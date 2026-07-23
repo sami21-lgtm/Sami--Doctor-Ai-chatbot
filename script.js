@@ -10,23 +10,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const rxDisease = document.getElementById("rxDisease");
     const historyList = document.getElementById("historyList");
 
+    // LocalStorage Keys
+    const HISTORY_KEY = "DR_SAMI_RX_HISTORY";
+    const ACTIVE_RX_KEY = "DR_SAMI_LAST_ACTIVE_RX";
+
     // Auto Textarea Height Adjustment
     diseaseInput.addEventListener("input", function () {
         this.style.height = "auto";
         this.style.height = (this.scrollHeight) + "px";
     });
 
-    // Reset Form & Workspace
+    // Restore Last Prescription on Page Reload
+    function restoreActivePrescription() {
+        const activeData = JSON.parse(localStorage.getItem(ACTIVE_RX_KEY));
+        if (activeData && activeData.result) {
+            rxDate.textContent = activeData.date;
+            rxDisease.textContent = activeData.disease.length > 25 ? activeData.disease.substring(0, 25) + "..." : activeData.disease;
+            diseaseInput.value = activeData.disease;
+            rxOutput.innerHTML = formatMarkdown(activeData.result);
+        }
+    }
+
+    // Reset Form & Clear Active Prescription Memory
     newRxBtn.addEventListener("click", () => {
         diseaseInput.value = "";
         diseaseInput.style.height = "auto";
         rxOutput.innerHTML = `<div class="placeholder-text">👈 Enter patient symptoms on the left and click <strong>"Generate Prescription"</strong>.</div>`;
         rxDisease.textContent = "--";
         rxDate.textContent = "--/--/----";
+        localStorage.removeItem(ACTIVE_RX_KEY); // Clear saved session
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Generate Prescription
+    // Generate Prescription Event Listener
     generateBtn.addEventListener("click", async () => {
         const diseaseText = diseaseInput.value.trim();
 
@@ -42,45 +58,52 @@ document.addEventListener("DOMContentLoaded", () => {
         generateBtn.disabled = true;
         generateBtn.style.opacity = "0.6";
 
-        // 🎯 STRICT ENGLISH SYSTEM PROMPT WITH TOP BANGLADESHI PHARMA DATABASE
+        // 🎯 STRICT CLINICAL SAFETY & ALL-MEDICINE COMPREHENSIVE PROMPT
         const systemPrompt = `
-        You are Dr. Sami AI, an expert specialist physician with high-level clinical reasoning and complete mastery of global & Bangladeshi pharmacology.
-        Generate an ACCURATE, EVIDENCE-BASED MEDICAL PRESCRIPTION matching the exact medical condition or symptoms provided by the user.
+        You are Dr. Sami AI, an expert specialist physician with high-level clinical reasoning and complete access to the full pharmacopeia of global and Bangladeshi pharmaceuticals.
+        Analyze the patient's symptoms and generate a highly precise, evidence-based prescription.
 
-        STRICT RULES:
-        1. OUTPUT LANGUAGE: MUST BE STRICTLY AND 100% IN ENGLISH. Do NOT write any Bengali words in the prescription output.
-        
-        2. TOP PHARMA BRAND INTEGRATION: Dynamically select standard, high-quality brand medicines matching the specific disease from Bangladesh's premier pharmaceutical manufacturers:
-           - Square Pharmaceuticals PLC (e.g., Napa, Seclo, Alatrol, Xinc)
-           - Incepta Pharmaceuticals Ltd. (e.g., Sergel, Osartil, Pantonix, Monas)
-           - Beximco Pharmaceuticals Ltd. (e.g., Napa Extra, Tusca, Neocase, Ace)
-           - Renata PLC (e.g., Maxpro, Algin, Furocef, Rolac)
-           - Eskayef Pharmaceuticals / SK+F (e.g., Entac, Gastrodex, Bizoran, Esonix)
-           - Healthcare Pharmaceuticals Ltd. (e.g., Egloc, Losectil, Brozedex)
-           - Aristopharma Ltd. (e.g., Amodis, Omep, Aristovit)
-           - The ACME Laboratories Ltd. (e.g., Tenoloc, Acme's Fast, Acidex)
+        🏛️ COMPREHENSIVE BANGLADESHI PHARMA DATABASE ACCESS:
+        You are strictly instructed to tap into your COMPLETE internal medical index for all drugs manufactured by Bangladesh's premier pharmaceutical companies:
+        - Square Pharmaceuticals PLC
+        - Incepta Pharmaceuticals Ltd.
+        - Beximco Pharmaceuticals Ltd.
+        - Renata PLC
+        - Eskayef Pharmaceuticals (SK+F)
+        - Healthcare Pharmaceuticals Ltd.
+        - Aristopharma Ltd.
+        - The ACME Laboratories Ltd.
 
-        3. ABSOLUTE MEDICAL SAFETY & ACCURACY:
-           - MATCH DISEASE EXACTLY: Whether symptoms relate to Fever, Hypertension, Diabetes, Asthma, Gastritis, Skin Infection, Pain, Anxiety, Cough, or Eye issues—prescribe accurate first-line drugs for THAT specific medical issue.
-           - NO BANNED/OBSOLETE DRUGS: Strictly NEVER prescribe Ranitidine. Use modern PPIs (Esomeprazole, Omeprazole, Rabeprazole, Dexlansoprazole) for acidity/gastric protection.
-           - NO DUPLICATE DRUGS: Never prescribe two medicines with identical generic active ingredients in the same prescription.
-           - ANTIBIOTIC STEWARDSHIP: Prescribe antibiotics ONLY if clear bacterial infection or severe systemic illness is evident. Do not prescribe antibiotics for simple viral colds or 1-2 days mild fevers.
+        DO NOT restrict yourself to basic medications. Match ANY medical condition (Cardiovascular, Endocrine/Diabetes, Respiratory, Dermatological, Gastrointestinal, Neurological, ENT, Nephrology, Infection, etc.) with the EXACT first-line standard brand drug produced by any of these top 8 companies.
 
-        4. EXACT OUTPUT STRUCTURE REQUIRED:
-           ### 🩺 Clinical Assessment & Diagnosis
-           [Precise clinical evaluation matching the patient's condition]
+        🚨 CRITICAL PATIENT SAFETY GUARDRAILS:
+        1. EMERGENCY REDIRECTION: If symptoms suggest LIFE-THREATENING EMERGENCIES (e.g., severe chest pain, heart attack, stroke/paralysis, severe breathing distress, massive bleeding, loss of consciousness), DO NOT PRESCRIBE MEDICINES.
+           Output: "🚨 EMERGENCY ALERT: Please visit the nearest Hospital Emergency Room or call 999 immediately."
+        2. STRICTLY BANNED DRUGS:
+           - NEVER prescribe Sedatives / Sleeping Pills (Benzodiazepines).
+           - NEVER prescribe Oral Steroids for routine complaints.
+           - NEVER prescribe Controlled Narcotics or habit-forming painkillers (e.g., Morphine, Pethidine, Tramadol).
+           - NEVER prescribe obsolete/banned drugs like Ranitidine. Use modern PPIs (Esomeprazole, Omeprazole, Rabeprazole).
+        3. NO DUPLICATES: Never prescribe two brand medicines containing identical generic ingredients in one prescription.
+        4. ANTIBIOTIC STEWARDSHIP: Do NOT give antibiotics for simple viral fevers or mild colds (1-3 days). Reserve antibiotics for confirmed/severe bacterial infections.
 
-           ### 📋 Recommended Diagnostic Tests
-           - [Test Name] - (Reason)
+        📝 OUTPUT FORMAT RULES:
+        - Output MUST BE STRICTLY AND 100% IN ENGLISH ONLY.
+        - Output Structure:
+          ### 🩺 Clinical Assessment & Diagnosis
+          [Precise clinical evaluation matching the patient's condition]
 
-           ### 💊 Prescribed Medications (Rx)
-           1. **[Form] [Brand Name] [Dose] ([Generic Name])** - [Company Name] - [Dosage: 1-0-1] - [Timing: Before/After meals] - [Duration: 5 days]
+          ### 📋 Recommended Diagnostic Tests
+          - [Test Name] - (Clinical reason)
 
-           ### 📝 Advice & Care Guidelines
-           - [Condition-specific lifestyle and dietary advice]
+          ### 💊 Prescribed Medications (Rx)
+          1. **[Form] [Brand Name] [Dose] ([Generic Name])** - [Company Name] - [Dosage: 1-0-1] - [Timing: Before/After meals] - [Duration: 5 days]
 
-           ### 🚨 Emergency Red Flags
-           - [Critical warning signs requiring immediate hospital visit]
+          ### 📝 Advice & Care Guidelines
+          - [Condition-specific lifestyle, dietary, and resting advice]
+
+          ### 🚨 Emergency Red Flags
+          - [Critical warning signs requiring immediate hospital visit]
         `;
 
         try {
@@ -93,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         { role: "system", content: systemPrompt },
                         { role: "user", content: `Patient Symptoms / Condition: ${diseaseText}` }
                     ],
-                    temperature: 0.0 // Zero temperature ensures consistent, stable clinical outputs
+                    temperature: 0.0 // Zero temperature ensures stable & consistent outputs
                 })
             });
 
@@ -110,6 +133,11 @@ document.addEventListener("DOMContentLoaded", () => {
             rxDisease.textContent = diseaseText.length > 25 ? diseaseText.substring(0, 25) + "..." : diseaseText;
             
             rxOutput.innerHTML = formatMarkdown(aiResponse);
+            
+            // Save to active state (Persistent across page reloads)
+            localStorage.setItem(ACTIVE_RX_KEY, JSON.stringify({ disease: diseaseText, result: aiResponse, date: today }));
+            
+            // Save to history list
             saveToHistory(diseaseText, aiResponse, today);
 
             if (window.innerWidth <= 768) {
@@ -117,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
         } catch (error) {
-            alert("Error: " + error.message);
+            alert("Error generating prescription: " + error.message);
         } finally {
             loader.style.display = "none";
             rxOutput.style.display = "block";
@@ -151,7 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
         html += `
             <hr style="margin-top: 25px; border: 0; border-top: 1px dashed #cbd5e1;">
             <div style="text-align: center; font-size: 11px; color: #94a3b8; margin-top: 12px;">
-                ⚡ Prescription generated by Dr. Sami AI System | Developed by <strong>Md. Emtiaz Hossain Sami</strong>
+                ⚠️ <strong>Safety Disclaimer:</strong> This is an AI-assisted digital prescription draft. Please consult a registered physician before taking any medication.<br>
+                ⚡ Prescriptions generated by Dr. Sami AI System | Developed by <strong>Md. Emtiaz Hossain Sami</strong>
             </div>
         `;
 
@@ -159,13 +188,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // LocalStorage History Functions
-    let history = JSON.parse(localStorage.getItem("DR_SAMI_RX_HISTORY")) || [];
+    let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
 
     function saveToHistory(disease, result, date) {
         const item = { id: Date.now(), disease, result, date };
         history.unshift(item);
         if (history.length > 8) history.pop();
-        localStorage.setItem("DR_SAMI_RX_HISTORY", JSON.stringify(history));
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
         renderHistory();
     }
 
@@ -188,6 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 rxDisease.textContent = item.disease.length > 25 ? item.disease.substring(0, 25) + "..." : item.disease;
                 rxOutput.innerHTML = formatMarkdown(item.result);
                 
+                // Save clicked item as active rx
+                localStorage.setItem(ACTIVE_RX_KEY, JSON.stringify({ disease: item.disease, result: item.result, date: item.date }));
+
                 if (window.innerWidth <= 768) {
                     rxOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
@@ -196,5 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Initialize UI on Page Load
+    restoreActivePrescription();
     renderHistory();
 });
