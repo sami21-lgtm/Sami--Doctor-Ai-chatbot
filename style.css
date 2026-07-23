@@ -2,7 +2,7 @@
     --primary-color: #0284c7;
     --primary-hover: #0369a1;
     --bg-dark: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.85); /* Semi-transparent for glassmorphism */
+    --card-bg: rgba(30, 41, 59, 0.85);
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --border-color: rgba(255, 255, 255, 0.12);
@@ -14,15 +14,15 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', 'Hind Siliguri', sans-serif;
+    
+    font-family: 'Hind Siliguri', 'Inter', system-ui, sans-serif;
 }
 
 body {
     background-color: var(--bg-dark);
-   
     background-image: 
         linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
-        url('627058011_915956991347956_7122116475994450660_n.jpg');
+        url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1920&auto=format&fit=crop');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -72,7 +72,7 @@ body {
     gap: 25px;
 }
 
-/* Input Card (Glassmorphism Effect) */
+/* Input Card */
 .input-card {
     background: var(--card-bg);
     backdrop-filter: blur(16px);
@@ -95,10 +95,11 @@ textarea {
     border-radius: 10px;
     padding: 12px;
     color: #fff;
-    font-size: 14px;
+    font-size: 15px;
     resize: none;
     outline: none;
     margin-bottom: 15px;
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
 textarea:focus {
@@ -234,9 +235,9 @@ button {
     padding-bottom: 15px;
 }
 
-.doctor-name { font-size: 18px; color: #0284c7; }
+.doctor-name { font-size: 18px; color: #0284c7; font-weight: 700; }
 .doctor-sub { font-size: 12px; color: #64748b; }
-.rx-symbol { font-size: 32px; font-weight: bold; color: #0284c7; font-family: serif; }
+.rx-symbol { font-size: 32px; font-weight: bold; color: #0284c7; font-family: Georgia, serif; }
 
 .patient-info {
     display: flex;
@@ -245,23 +246,30 @@ button {
     padding: 10px 15px;
     border-radius: 6px;
     margin: 15px 0;
-    font-size: 13px;
+    font-size: 14px;
 }
 
+/* 💥 নিখুঁত বাংলা ফন্টিং এর জন্য Rx Body অপ্টিমাইজেশন */
 .rx-body {
     flex: 1;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #1e293b;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #0f172a;
+    font-family: 'Hind Siliguri', sans-serif;
 }
 
 .rx-body h3 {
-    font-size: 15px;
+    font-size: 16px;
     color: #0369a1;
-    margin-top: 15px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    border-bottom: 1.5px dashed #cbd5e1;
+    padding-bottom: 4px;
+    font-weight: 700;
+}
+
+.rx-body p, .rx-body div {
     margin-bottom: 6px;
-    border-bottom: 1px dashed #cbd5e1;
-    padding-bottom: 3px;
 }
 
 .placeholder-text {
@@ -337,7 +345,7 @@ button {
     .rx-symbol { font-size: 26px; }
 }
 
-/* 🖨️ Print Stylesheet (Hides Background Picture during Printing) */
+/* 🖨️ Print Stylesheet */
 @media print {
     body { 
         background: white !important; 
