@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami AI – Multilingual Chatbot | Developed by Md Emtiaz Hossain Sami</title>
+    <title>Sami Health AI – Medical Assistant | Developed by Md Emtiaz Hossain Sami</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Photo -->
     <div class="bg-image"></div>
-
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-logo">🤖</div>
+            <div class="sidebar-logo">🩺</div>
             <div>
-                <div class="sidebar-title">Sami AI</div>
-                <div class="sidebar-subtitle">Multilingual Chatbot</div>
+                <div class="sidebar-title">Sami Doctor AI</div>
+                <div class="sidebar-subtitle">Health & Medical Assistant</div>
             </div>
         </div>
         <button class="new-chat-btn" id="newChatBtn">
-            <span>＋</span> New Chat
+            <span>＋</span> New Consultation
         </button>
         <div class="conversations-list" id="conversationsList"></div>
         <div class="sidebar-footer">
@@ -33,35 +31,35 @@
         </div>
     </aside>
 
-    <!-- Main Chat -->
+    <!-- Main Chat Area -->
     <div class="main" id="mainArea">
         <div class="top-bar">
             <button class="menu-toggle" id="menuToggle" title="Menu">☰</button>
-            <div class="top-bar-avatar">🤖</div>
+            <div class="top-bar-avatar">🩺</div>
             <div class="top-bar-info">
-                <div class="top-bar-name">Sami AI</div>
-                <div class="top-bar-status"><span class="status-dot"></span> Active & Ready</div>
+                <div class="top-bar-name">Sami Doctor AI</div>
+                <div class="top-bar-status"><span class="status-dot"></span> Online Assistant</div>
             </div>
             <button class="voice-toggle-btn" id="voiceToggleBtn" title="Toggle voice response">
                 🔊 Voice Off
             </button>
         </div>
 
-        <!-- Messages Area -->
+        <!-- Messages Container -->
         <div class="messages-container" id="messagesContainer">
             <div class="welcome-screen" id="welcomeScreen">
-                <div class="welcome-avatar">🤖</div>
-                <div class="welcome-title">Welcome to Sami AI! 👋</div>
+                <div class="welcome-avatar">👨‍⚕️</div>
+                <div class="welcome-title">আমি আপনার Sami Health AI সহকারী! 🩺</div>
                 <div class="welcome-subtitle">
-                    I can chat in English, Bangla, or Banglish.<br>
-                    Just write in any language you prefer.
+                    বাংলা, English বা Banglish-এ আপনার স্বাস্থ্য সম্পর্কিত লক্ষণ বা প্রশ্ন লিখুন।<br>
+                    <small style="color: #f39c12; margin-top: 5px; display: inline-block;">⚠️ এটি কেবল তথ্যমূলক সহায়তার জন্য, চূড়ান্ত চিকিৎসার জন্য ডাক্তারের পরামর্শ নিন।</small>
                 </div>
                 <div class="welcome-suggestions">
-                    <div class="suggestion-chip" data-msg="Who are you?">👋 Who are you?</div>
-                    <div class="suggestion-chip" data-msg="What can you do?">💡 What can you do?</div>
-                    <div class="suggestion-chip" data-msg="Tell me about DIU">🎓 About DIU</div>
-                    <div class="suggestion-chip" data-msg="Software engineering ki?">💻 Software Eng.</div>
-                    <div class="suggestion-chip" data-msg="Tell me a joke">😄 Joke</div>
+                    <div class="suggestion-chip" data-msg="আমার মাথা ব্যথা করছে">🧠 মাথা ব্যথা (Headache)</div>
+                    <div class="suggestion-chip" data-msg="আমার জ্বর এসেছে">🌡️ জ্বর (Fever)</div>
+                    <div class="suggestion-chip" data-msg="thanda ar kashi hoise">🤧 ঠান্ডা ও কাশি</div>
+                    <div class="suggestion-chip" data-msg="pet betha korle ki korbo">🤢 পেট ব্যথা</div>
+                    <div class="suggestion-chip" data-msg="healthy diet tips bangla">🥗 স্বাস্থ্যকর ডায়েট</div>
                 </div>
             </div>
         </div>
@@ -69,9 +67,9 @@
         <!-- Input Area -->
         <div class="input-area">
             <div class="input-wrapper">
-                <textarea id="userInput" rows="1" placeholder="Type your message..."></textarea>
-                <button class="mic-btn" id="micBtn" title="Voice input">🎤</button>
-                <button class="send-btn" id="sendBtn" title="Send">➤</button>
+                <textarea id="userInput" rows="1" placeholder="আপনার স্বাস্থ্য সমস্যা বা লক্ষণ লিখুন..."></textarea>
+                <button class="mic-btn" id="micBtn" title="ভয়েস ইনপুট">🎤</button>
+                <button class="send-btn" id="sendBtn" title="পাঠান">➤</button>
             </div>
         </div>
     </div>
