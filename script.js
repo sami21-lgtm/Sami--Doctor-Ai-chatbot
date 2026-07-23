@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const historyList = document.getElementById("historyList");
     const langRadios = document.querySelectorAll('input[name="rxLang"]');
 
-    // UI Translation Dictionary for instant language switching
+    // UI Translation Dictionary for Instant Language Switching
     const uiTranslations = {
         bn: {
             subtitle: "এআই বিশেষজ্ঞ চিকিৎসক ও ডিজিটাল প্রেসক্রিপশন সিস্টেম",
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             labelSymptom: "সমস্যা:",
             loaderText: "ডাক্তার এআই উপসর্গগুলো পর্যবেক্ষণ করে প্রেসক্রিপশন তৈরি করছেন...",
             placeholderRx: "👈 বামপাশে রোগীর লক্ষণ লিখে <strong>\"প্রেসক্রিপশন তৈরি করুন\"</strong> বাটনে চাপ দিন।",
-            disclaimer: "⚠️ <em>এটি একটি এআই জেনারেটেড ডিজিটাল প্রেসক্রিপশন। ইমার্জেন্সি অবস্থায় অবিলম্বে নিকটস্থ হাসপাতালে যোগাযোগ করুন।</em>"
+            disclaimer: "⚠️ <em>এটি একটি এআই জেনারেটেড ডিজিটাল প্রেসক্রিপশন। ইমার্জেন্সি অবস্থায় অবিলম্বে নিকটস্থ হাসপাতালে যোগাযোগ করুন।</em>"
         },
         en: {
             subtitle: "AI Specialist Physician & Prescription System",
@@ -104,31 +104,38 @@ document.addEventListener("DOMContentLoaded", () => {
         generateBtn.disabled = true;
         generateBtn.style.opacity = "0.6";
 
+        // UNIFIED CLINICAL PROTOCOL (একই লজিক উভয় ভাষার জন্য)
+        const baseMedicalRules = `
+        You are Dr. Sami AI, an expert specialist physician with high-level clinical reasoning.
+        Generate an ACCURATE, EVIDENCE-BASED MEDICAL PRESCRIPTION matching exact patient symptoms.
+
+        STRICT CLINICAL SAFETY PROTOCOL:
+        1. FIRST-LINE TREATMENT ONLY: For uncomplicated acute symptoms (e.g., 1-3 days mild/moderate fever, body pain, mild cold), prescribe ONLY standard supportive treatment (e.g., Paracetamol, Antihistamines, PPI/Antacids).
+        2. NO UNNECESSARY ANTIBIOTICS: ABSOLUTELY DO NOT prescribe antibiotics (such as Azithromycin, Cefixime, Ciprofloxacin) for simple acute fever or viral symptoms unless severe bacterial infection signs are explicitly mentioned.
+        3. NO DUPLICATE DRUGS: NEVER prescribe two medicines with identical generic ingredients (e.g., STRICTLY PROHIBITED: Napa + Napa Extra together or Seclo + Sergel together).
+        4. TOP BANGLADESHI PHARMA BRANDS: Use trusted standard brands across Square, Beximco, Incepta, Renata, Healthcare, SK+F, ACI, Opsonin, Aristopharma, ACME.
+        5. BRAND FORMAT: **Tab./Cap./Syr. Brand Name Dose (Generic Name)**
+        6. DOSAGE FORMAT: Always use clear English digits for dosages (1-0-1, 1-0-0, 0-0-1) in both languages for visual clarity.
+        `;
+
         let systemPrompt = "";
 
         if (selectedLang === "bn") {
             systemPrompt = `
-            You are an expert specialist physician AI (Dr. Sami AI) with human doctor level clinical reasoning.
-            Generate a HIGHLY ACCURATE, EVIDENCE-BASED MEDICAL PRESCRIPTION matching the patient symptoms.
+            ${baseMedicalRules}
             Language: STRICTLY IN BENGALI (বাংলা).
-
-            CLINICAL SAFETY RULES:
-            1. NO DUPLICATE DRUGS: NEVER give two medicines with identical generic ingredients (e.g., STRICTLY PROHIBITED to give Napa + Napa Extra together or Seclo + Sergel together).
-            2. TOP BANGLADESHI PHARMA BRANDS: Use trusted standard brands across Square, Beximco, Incepta, Renata, Healthcare, SK+F, ACI, Opsonin, Aristopharma, ACME, etc.
-            3. Exact brand format: **Tab./Cap./Syr. Brand Name Weight (Generic Name)**
-            4. Use English digits for dosages (1-0-1, 1-0-0) for clear rendering.
 
             Bengali Prescription Output Structure:
             ### 🩺 সম্ভাব্য শারীরিক পর্যবেক্ষণ
-            [লক্ষণ অনুযায়ী ক্লিনিক্যাল পর্যবেক্ষণ]
+            [লক্ষণ অনুযায়ী ক্লিনিক্যাল পর্যবেক্ষণ]
 
             ### 📋 প্রয়োজনীয় পরীক্ষাসমূহ (Diagnostic Tests)
-            - [প্রয়োজনীয় ১-২টি ল্যাব টেস্ট] - (কারণ)
+            - [প্রয়োজনীয় ১-২টি ল্যাব টেস্ট] - (কারণ)
 
             ### 💊 ওষুধ সেবনের নির্দেশিকা (Rx)
-            1. **[ওষুধের নাম (জেনেরিক)]** - [মাত্রা: 1-0-1] - [নিয়ম: খাওয়ার পর/আগে] - [মেয়াদ: 5 দিন]
+            1. **[ওষুধের ব্র্যান্ড নাম (জেনেরিক)]** - [মাত্রা: 1-0-1] - [নিয়ম: খাওয়ার পর/আগে] - [মেয়াদ: 5 দিন]
 
-            ### 📝 পরামর্শ ও নিয়মাবলী
+            ### 📝 পরামর্শ ও নিয়মাবলী
             - [রোগীর জন্য সাধারণ পরামর্শ]
 
             ### 🚨 জরুরি সতর্কতা (Red Flags)
@@ -136,15 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         } else {
             systemPrompt = `
-            You are an expert specialist physician AI (Dr. Sami AI) with human doctor level reasoning.
-            Generate a HIGHLY ACCURATE, EVIDENCE-BASED MEDICAL PRESCRIPTION matching exact patient symptoms.
+            ${baseMedicalRules}
             Language: STRICTLY IN ENGLISH.
-
-            CLINICAL SAFETY RULES:
-            1. NO DUPLICATE DRUGS: NEVER give two medicines with identical generic ingredients (e.g. NEVER give Napa + Napa Extra together).
-            2. TOP BANGLADESHI PHARMA BRANDS: Use authentic brands across Square, Beximco, Incepta, Renata, Healthcare, SK+F, ACI, Opsonin, etc.
-            3. Format: **Tab./Cap./Syr. Brand Name Weight (Generic Name)**
-            4. Clear dosage digits (1-0-1, 0-0-1).
 
             English Prescription Output Structure:
             ### 🩺 Clinical Assessment & Diagnosis
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         { role: "system", content: systemPrompt },
                         { role: "user", content: `Patient Symptoms: ${diseaseText}` }
                     ],
-                    temperature: 0.1
+                    temperature: 0.0
                 })
             });
 
@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return html;
     }
 
-    // History Storage
+    // History Storage Functions
     let history = JSON.parse(localStorage.getItem("DR_SAMI_RX_HISTORY")) || [];
 
     function saveToHistory(disease, result, date) {
@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Set initial default UI language
+    // Set Initial Default UI Language
     updateLanguageUI('bn');
     renderHistory();
 });
