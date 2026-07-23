@@ -11,27 +11,27 @@ document.addEventListener("DOMContentLoaded", () => {
     const historyList = document.getElementById("historyList");
     const langRadios = document.querySelectorAll('input[name="rxLang"]');
 
-    // UI Translation Dictionary for Instant Language Switching
+    // UI Translation Dictionary for Instant Interface Switching
     const uiTranslations = {
         bn: {
             subtitle: "এআই বিশেষজ্ঞ চিকিৎসক ও ডিজিটাল প্রেসক্রিপশন সিস্টেম",
             symptomTitle: "📝 রোগীর লক্ষণ ও উপসর্গ",
-            symptomDesc: "রোগীর সমস্যা, জ্বর, ব্যথা বা অন্য যেকোনো লক্ষণ বিস্তারিত লিখুন:",
-            placeholder: "যেমন: ২ দিন ধরে জ্বর, শুকনো কাশি এবং পেটে গ্যাস...",
+            symptomDesc: "রোগীর সমস্যা, জ্বর, প্রেসার, চর্মরোগ, হাঁপানি বা অন্য যেকোনো লক্ষণ লিখুন:",
+            placeholder: "যেমন: ৩ দিন ধরে জ্বর, বুক জ্বালাপোড়া এবং শুকনো কাশি...",
             genBtn: "✨ প্রেসক্রিপশন তৈরি করুন",
             resetBtn: "🔄 রিসেট",
             historyTitle: "📜 পূর্ববর্তী প্রেসক্রিপশন হিস্ট্রি",
             labelDate: "তারিখ:",
             labelSymptom: "সমস্যা:",
-            loaderText: "ডাক্তার এআই উপসর্গগুলো পর্যবেক্ষণ করে প্রেসক্রিপশন তৈরি করছেন...",
+            loaderText: "ডাক্তার এআই উপসর্গগুলো বিশ্লেষণ করে প্রেসক্রিপশন তৈরি করছেন...",
             placeholderRx: "👈 বামপাশে রোগীর লক্ষণ লিখে <strong>\"প্রেসক্রিপশন তৈরি করুন\"</strong> বাটনে চাপ দিন।",
             disclaimer: "⚠️ <em>এটি একটি এআই জেনারেটেড ডিজিটাল প্রেসক্রিপশন। ইমার্জেন্সি অবস্থায় অবিলম্বে নিকটস্থ হাসপাতালে যোগাযোগ করুন।</em>"
         },
         en: {
             subtitle: "AI Specialist Physician & Prescription System",
             symptomTitle: "📝 Patient Symptoms & Condition",
-            symptomDesc: "Describe patient symptoms, pain, fever, duration, or medical issues:",
-            placeholder: "e.g., High fever for 2 days, dry cough, and gastric acidity...",
+            symptomDesc: "Describe patient symptoms, pain, BP, skin issues, asthma, or medical conditions:",
+            placeholder: "e.g., High fever for 3 days, acidity, and dry cough...",
             genBtn: "✨ Generate Prescription",
             resetBtn: "🔄 Reset",
             historyTitle: "📜 Previous Prescription History",
@@ -70,13 +70,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Auto Textarea Height
+    // Auto Textarea Height Adjustment
     diseaseInput.addEventListener("input", function () {
         this.style.height = "auto";
         this.style.height = (this.scrollHeight) + "px";
     });
 
-    // Reset Form
+    // Reset Form & Workspace
     newRxBtn.addEventListener("click", () => {
         const selectedLang = document.querySelector('input[name="rxLang"]:checked').value;
         diseaseInput.value = "";
@@ -104,18 +104,35 @@ document.addEventListener("DOMContentLoaded", () => {
         generateBtn.disabled = true;
         generateBtn.style.opacity = "0.6";
 
-        // UNIFIED CLINICAL PROTOCOL (একই লজিক উভয় ভাষার জন্য)
+        // 🎯 UNIFIED & DETERMINISTIC CLINICAL PROTOCOL (সকল রোগের জন্য সেরা কোম্পানির ওষুধ)
         const baseMedicalRules = `
-        You are Dr. Sami AI, an expert specialist physician with high-level clinical reasoning.
-        Generate an ACCURATE, EVIDENCE-BASED MEDICAL PRESCRIPTION matching exact patient symptoms.
+        You are Dr. Sami AI, an expert specialist physician with high-level clinical reasoning and complete mastery of global & Bangladeshi pharmacology.
+        Generate an ACCURATE, EVIDENCE-BASED MEDICAL PRESCRIPTION matching the exact medical condition or symptoms provided by the user.
 
-        STRICT CLINICAL SAFETY PROTOCOL:
-        1. FIRST-LINE TREATMENT ONLY: For uncomplicated acute symptoms (e.g., 1-3 days mild/moderate fever, body pain, mild cold), prescribe ONLY standard supportive treatment (e.g., Paracetamol, Antihistamines, PPI/Antacids).
-        2. NO UNNECESSARY ANTIBIOTICS: ABSOLUTELY DO NOT prescribe antibiotics (such as Azithromycin, Cefixime, Ciprofloxacin) for simple acute fever or viral symptoms unless severe bacterial infection signs are explicitly mentioned.
-        3. NO DUPLICATE DRUGS: NEVER prescribe two medicines with identical generic ingredients (e.g., STRICTLY PROHIBITED: Napa + Napa Extra together or Seclo + Sergel together).
-        4. TOP BANGLADESHI PHARMA BRANDS: Use trusted standard brands across Square, Beximco, Incepta, Renata, Healthcare, SK+F, ACI, Opsonin, Aristopharma, ACME.
-        5. BRAND FORMAT: **Tab./Cap./Syr. Brand Name Dose (Generic Name)**
-        6. DOSAGE FORMAT: Always use clear English digits for dosages (1-0-1, 1-0-0, 0-0-1) in both languages for visual clarity.
+        STRICT PHARMACOPEIA & BRAND RULES:
+        1. TOP PHARMA BRAND INTEGRATION: Select high-quality, authentic brand medicines dynamically matching the user's disease from premier manufacturers:
+           - Square Pharmaceuticals PLC (e.g., Napa, Seclo, Alatrol, Xinc)
+           - Incepta Pharmaceuticals Ltd. (e.g., Sergel, Osartil, Pantonix, Monas)
+           - Beximco Pharmaceuticals Ltd. (e.g., Napa Extra, Tusca, Neocase, Ace)
+           - Renata PLC (e.g., Maxpro, Algin, Furocef, Rolac)
+           - Eskayef Pharmaceuticals / SK+F (e.g., Entac, Gastrodex, Bizoran, Esonix)
+           - Healthcare Pharmaceuticals Ltd. (e.g., Egloc, Losectil, Brozedex)
+           - Aristopharma Ltd. (e.g., Amodis, Omep, Aristovit)
+           - The ACME Laboratories Ltd. (e.g., Tenoloc, Acme's Fast, Acidex)
+        
+        2. BENGALI VS ENGLISH CONSISTENCY:
+           - The prescribed drug names, generic names, exact dosage (1-0-1), duration, and selected manufacturer MUST BE 100% IDENTICAL regardless of whether output language is Bengali or English. 
+           - Do NOT change medicine choices or brands when switching language. Only translate the explanations, advice, and category headers.
+
+        3. ABSOLUTE MEDICAL SAFETY & ACCURACY:
+           - MATCH DISEASE EXACTLY: Whether it is Hypertension, Diabetes, Asthma, Gastritis, Fever, Skin Infection, Pain, Anxiety, Cough, Eye issue, or Allergy—prescribe first-line standard drugs for THAT specific condition.
+           - NO BANNED/OBSOLETE DRUGS: Strictly NEVER prescribe Ranitidine. Always use modern PPIs (Esomeprazole, Omeprazole, Rabeprazole, Dexlansoprazole).
+           - NO DUPLICATE DRUGS: Never prescribe two medicines with identical active ingredients in the same prescription.
+           - ANTIBIOTIC STEWARDSHIP: Prescribe antibiotics ONLY when clear bacterial infection or severe systemic symptoms are present. Do not give antibiotics for 1-2 day simple cold/fever.
+
+        4. DRUG FORMAT: **[Form] [Brand Name] [Dose] ([Generic Name])** - [Company Name]
+           Example: **Tab. Sergel 20mg (Esomeprazole)** - Incepta Pharmaceuticals
+        5. DOSAGE DIGITS: Use standard clear English numerals (1-0-1, 1-0-0, 0-0-1, 0-1-0) in both languages.
         `;
 
         let systemPrompt = "";
@@ -123,44 +140,44 @@ document.addEventListener("DOMContentLoaded", () => {
         if (selectedLang === "bn") {
             systemPrompt = `
             ${baseMedicalRules}
-            Language: STRICTLY IN BENGALI (বাংলা).
+            Output Language: STRICTLY BENGALI (বাংলা).
 
-            Bengali Prescription Output Structure:
+            Required Bengali Prescription Structure:
             ### 🩺 সম্ভাব্য শারীরিক পর্যবেক্ষণ
-            [লক্ষণ অনুযায়ী ক্লিনিক্যাল পর্যবেক্ষণ]
+            [রোগীর সমস্যা অনুযায়ী নির্ভুল ক্লিনিক্যাল মূল্যায়ন]
 
             ### 📋 প্রয়োজনীয় পরীক্ষাসমূহ (Diagnostic Tests)
-            - [প্রয়োজনীয় ১-২টি ল্যাব টেস্ট] - (কারণ)
+            - [নির্দিষ্ট রোগের জন্য প্রয়োজনীয় ল্যাব টেস্ট] - (কারণ)
 
             ### 💊 ওষুধ সেবনের নির্দেশিকা (Rx)
-            1. **[ওষুধের ব্র্যান্ড নাম (জেনেরিক)]** - [মাত্রা: 1-0-1] - [নিয়ম: খাওয়ার পর/আগে] - [মেয়াদ: 5 দিন]
+            1. **[ফর্ম ব্র্যান্ড নাম ডোজ (জেনেরিক নাম)]** - [কোম্পানির নাম] - [মাত্রা: 1-0-1] - [নিয়ম: খাওয়ার আগে/পরে] - [মেয়াদ: 5 দিন]
 
             ### 📝 পরামর্শ ও নিয়মাবলী
-            - [রোগীর জন্য সাধারণ পরামর্শ]
+            - [রোগীর নির্দিষ্ট রোগের উপযোগী খাদ্য ও লাইফস্টাইল সংক্রান্ত পরামর্শ]
 
             ### 🚨 জরুরি সতর্কতা (Red Flags)
-            - [জরুরি জটিলতার সতর্কতা]
+            - [উক্ত জটিলতায় কখন দ্রুত হাসপাতালে যোগাযোগ করতে হবে]
             `;
         } else {
             systemPrompt = `
             ${baseMedicalRules}
-            Language: STRICTLY IN ENGLISH.
+            Output Language: STRICTLY ENGLISH.
 
-            English Prescription Output Structure:
+            Required English Prescription Structure:
             ### 🩺 Clinical Assessment & Diagnosis
-            [Precise clinical evaluation]
+            [Precise clinical evaluation matching the patient's exact disease]
 
             ### 📋 Recommended Diagnostic Tests
             - [Test Name] - (Reason)
 
             ### 💊 Prescribed Medications (Rx)
-            1. **[Brand Name (Generic)]** - [Dosage: 1-0-1] - [Timing: After/Before meals] - [Duration: 5 days]
+            1. **[Form Brand Name Dose (Generic)]** - [Company Name] - [Dosage: 1-0-1] - [Timing: Before/After meals] - [Duration: 5 days]
 
             ### 📝 Advice & Care Guidelines
-            - [Condition specific guidelines]
+            - [Condition specific lifestyle & dietary guidance]
 
             ### 🚨 Emergency Red Flags
-            - [Critical warning symptoms]
+            - [Critical warning signs requiring immediate hospital visit]
             `;
         }
 
@@ -172,9 +189,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     model: "llama-3.3-70b-versatile",
                     messages: [
                         { role: "system", content: systemPrompt },
-                        { role: "user", content: `Patient Symptoms: ${diseaseText}` }
+                        { role: "user", content: `Patient Condition / Symptoms: ${diseaseText}` }
                     ],
-                    temperature: 0.0
+                    temperature: 0.0 // 🎯 তাপমাত্রা 0.0 থাকায় ভাষা পাল্টালেও ওষুধ পরিবর্তন হবে না
                 })
             });
 
@@ -207,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Formatter with Branding Watermark
+    // Clean Markdown Formatter with Branding Signature
     function formatMarkdown(text) {
         if (!text) return "";
         let lines = text.split('\n');
@@ -239,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return html;
     }
 
-    // History Storage Functions
+    // LocalStorage History Functions
     let history = JSON.parse(localStorage.getItem("DR_SAMI_RX_HISTORY")) || [];
 
     function saveToHistory(disease, result, date) {
