@@ -1,357 +1,536 @@
+
 :root {
-    --primary-color: #0284c7;
-    --primary-hover: #0369a1;
-    --bg-dark: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.85);
-    --text-main: #f8fafc;
+    /* Color Palette */
+    --primary-glow: #00f2fe;
+    --primary-accent: #38bdf8;
+    --primary-hover: #0284c7;
+    --ai-purple: #818cf8;
+    
+    --bg-dark: #090d16;
+    --glass-card: rgba(15, 23, 42, 0.78);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-focus: rgba(56, 189, 248, 0.5);
+    
+    --text-primary: #f8fafc;
     --text-muted: #94a3b8;
-    --border-color: rgba(255, 255, 255, 0.12);
-    --rx-bg: #ffffff;
-    --rx-text: #0f172a;
+    --text-dark: #0f172a;
+    
+    --rx-paper-bg: #ffffff;
+    --rx-brand-blue: #0284c7;
 }
 
+/* --- Base & Reset Rules --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    
-    font-family: 'Hind Siliguri', 'Inter', system-ui, sans-serif;
+    font-family: 'Hind Siliguri', 'Inter', system-ui, -apple-system, sans-serif;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 body {
     background-color: var(--bg-dark);
+    
+    /* 🖼️ ব্যাকগ্রাউন্ড পিকচার সেটিং 
+       ('your-photo.jpg' তুলে দিয়ে আপনার ছবির নাম/পাথ দিন) */
     background-image: 
-        linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)),
-        url('627058011_915956991347956_7122116475994450660_n.jpg');
+        linear-gradient(135deg, rgba(9, 13, 22, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%),
+        url('your-photo.jpg'); 
+        
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
     background-repeat: no-repeat;
-    color: var(--text-main);
+    color: var(--text-primary);
     min-height: 100vh;
-    padding-bottom: 30px;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Navbar */
-.navbar {
+/* App Wrapper Container */
+.app-container {
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- App Header / Navigation --- */
+.app-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 25px;
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-color);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo h1 {
-    font-size: 20px;
-    color: #fff;
-    font-weight: 700;
-}
-
-.logo h1 span {
-    color: #38bdf8;
-}
-
-/* Container Layout */
-.container {
-    max-width: 1200px;
-    margin: 25px auto;
-    padding: 0 15px;
-    display: grid;
-    grid-template-columns: 1fr 1.25fr;
-    gap: 25px;
-}
-
-/* Input Card */
-.input-card {
-    background: var(--card-bg);
+    background: var(--glass-card);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    padding: 22px;
+    border: 1px solid var(--glass-border);
+    padding: 16px 24px;
     border-radius: 16px;
-    border: 1px solid var(--border-color);
-    height: fit-content;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.input-card h2 { font-size: 18px; margin-bottom: 4px; }
-.subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; }
-
-textarea {
-    width: 100%;
-    min-height: 110px;
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 12px;
-    color: #fff;
-    font-size: 15px;
-    resize: none;
-    outline: none;
-    margin-bottom: 15px;
-    font-family: 'Hind Siliguri', sans-serif;
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-textarea:focus {
-    border-color: var(--primary-color);
+.logo-icon {
+    font-size: 30px;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.5));
+    animation: pulse 3s infinite ease-in-out;
 }
 
-/* Language Selector */
-.lang-selector {
-    background: rgba(15, 23, 42, 0.5);
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border-color);
-    margin-bottom: 18px;
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
 }
 
-.lang-label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    text-transform: uppercase;
+.logo-area h1 {
+    font-size: 22px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ffffff, var(--primary-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     letter-spacing: 0.5px;
 }
 
-.radio-group {
-    display: flex;
-    gap: 15px;
+.subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
 }
 
-.radio-option {
+/* Language Switcher Radio Group */
+.lang-selector {
     display: flex;
     align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #e2e8f0;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 1px solid var(--glass-border);
 }
 
-.radio-option input[type="radio"] {
-    accent-color: var(--primary-color);
+.lang-selector label {
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.lang-selector input[type="radio"] {
+    accent-color: var(--primary-accent);
     width: 16px;
     height: 16px;
     cursor: pointer;
 }
 
-/* Buttons */
-.action-btns {
+/* --- Main Responsive Layout Grid --- */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    flex: 1;
+    align-items: start;
+}
+
+/* Card General Glass Styling */
+.card {
+    background: var(--glass-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+}
+
+.card:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+/* --- Input Section --- */
+.input-panel h2 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    color: var(--text-primary);
     display: flex;
-    gap: 10px;
-}
-
-button {
-    cursor: pointer;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 18px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: 0.2s ease;
-}
-
-.btn-primary { background: var(--primary-color); color: #fff; flex: 1; }
-.btn-primary:hover { background: var(--primary-hover); }
-
-.btn-secondary { background: rgba(255, 255, 255, 0.1); color: #fff; }
-.btn-reset { background: #e11d48; color: #fff; }
-
-/* Loader */
-.loader {
-    text-align: center;
-    margin: 15px 0;
-}
-
-.spinner {
-    width: 28px;
-    height: 28px;
-    border: 3px solid rgba(255,255,255,0.2);
-    border-top-color: var(--primary-color);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 8px;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* History Section */
-.history-section {
-    margin-top: 25px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 15px;
-}
-
-.history-section h3 { font-size: 13px; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; }
-
-.history-list {
-    max-height: 180px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: 8px;
 }
 
-.history-item {
-    background: rgba(15, 23, 42, 0.6);
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.05);
-    cursor: pointer;
+.instruction {
     font-size: 13px;
-    transition: 0.2s;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.5;
 }
 
-.history-item:hover { background: rgba(2, 132, 199, 0.25); }
+textarea#diseaseInput {
+    width: 100%;
+    min-height: 120px;
+    max-height: 300px;
+    background: rgba(9, 13, 22, 0.6);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 14px;
+    color: var(--text-primary);
+    font-size: 15px;
+    outline: none;
+    resize: none;
+    margin-bottom: 18px;
+    transition: all 0.3s ease;
+    line-height: 1.6;
+}
 
-/* Prescription Display Pad */
-.rx-card {
-    background: var(--rx-bg);
-    color: var(--rx-text);
-    padding: 30px;
-    border-radius: 16px;
-    min-height: 560px;
+textarea#diseaseInput:focus {
+    border-color: var(--glass-border-focus);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+    background: rgba(9, 13, 22, 0.85);
+}
+
+textarea#diseaseInput::placeholder {
+    color: #64748b;
+}
+
+/* Button Styling */
+.btn-group {
+    display: flex;
+    gap: 12px;
+}
+
+.btn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-hover), var(--primary-glow));
+    color: #04111d;
+    flex: 2;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.45);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-secondary {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    flex: 1;
+}
+
+.btn-secondary:hover {
+    background: rgba(239, 68, 68, 0.3);
+    color: #ffffff;
+}
+
+/* History Card */
+.history-card h3 {
+    font-size: 14px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+.history-list {
     display: flex;
     flex-direction: column;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* History Scrollbar */
+.history-list::-webkit-scrollbar {
+    width: 4px;
+}
+.history-list::-webkit-scrollbar-thumb {
+    background: var(--glass-border);
+    border-radius: 4px;
+}
+
+.history-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 13px;
+}
+
+.history-item:hover {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.3);
+    transform: translateX(4px);
+}
+
+/* --- Digital Prescription Pad (Output Panel) --- */
+.prescription-pad {
+    background: var(--rx-paper-bg);
+    color: var(--text-dark);
+    padding: 35px;
+    border-radius: 16px;
+    min-height: 580px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    position: relative;
 }
 
 .rx-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #0284c7;
-    padding-bottom: 15px;
+    align-items: flex-start;
+    padding-bottom: 12px;
 }
 
-.doctor-name { font-size: 18px; color: #0284c7; font-weight: 700; }
-.doctor-sub { font-size: 12px; color: #64748b; }
-.rx-symbol { font-size: 32px; font-weight: bold; color: #0284c7; font-family: Georgia, serif; }
+.doc-info h2 {
+    font-size: 20px;
+    color: var(--rx-brand-blue);
+    font-weight: 700;
+    margin-bottom: 2px;
+}
 
-.patient-info {
+.doc-info p {
+    font-size: 13px;
+    color: #475569;
+    font-weight: 500;
+}
+
+.doc-info small {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.rx-symbol {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--rx-brand-blue);
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+.rx-divider {
+    border: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--rx-brand-blue), #93c5fd);
+    margin: 10px 0 16px 0;
+}
+
+.patient-meta {
     display: flex;
     justify-content: space-between;
     background: #f1f5f9;
-    padding: 10px 15px;
-    border-radius: 6px;
-    margin: 15px 0;
-    font-size: 14px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    color: #334155;
 }
 
-/* 💥 নিখুঁত বাংলা ফন্টিং এর জন্য Rx Body অপ্টিমাইজেশন */
+/* Loader Animation */
+.loader-container {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border: 4px solid #e2e8f0;
+    border-top-color: var(--rx-brand-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+#uiLoaderText {
+    font-size: 13px;
+    color: #64748b;
+}
+
+/* Prescription Output Text Body */
 .rx-body {
     flex: 1;
-    font-size: 15px;
+    font-size: 14.5px;
     line-height: 1.8;
     color: #0f172a;
-    font-family: 'Hind Siliguri', sans-serif;
 }
 
 .rx-body h3 {
-    font-size: 16px;
+    font-size: 15px;
     color: #0369a1;
     margin-top: 18px;
     margin-bottom: 8px;
-    border-bottom: 1.5px dashed #cbd5e1;
+    border-bottom: 1px dashed #cbd5e1;
     padding-bottom: 4px;
     font-weight: 700;
 }
 
-.rx-body p, .rx-body div {
+.rx-body div, .rx-body p {
     margin-bottom: 6px;
 }
 
 .placeholder-text {
     text-align: center;
     color: #94a3b8;
-    margin-top: 100px;
+    margin-top: 120px;
+    font-size: 14px;
 }
 
+/* Rx Footer */
 .rx-footer {
     border-top: 1px solid #e2e8f0;
-    padding-top: 10px;
-    margin-top: 20px;
+    padding-top: 12px;
+    margin-top: 25px;
     font-size: 11px;
     color: #64748b;
+    text-align: center;
 }
 
-.btn-print {
-    background: #0f172a;
-    color: #fff;
-    margin-top: 15px;
-    width: 100%;
+/* Global Footer */
+.app-footer {
+    text-align: center;
+    padding: 20px 0 10px 0;
+    font-size: 13px;
+    color: var(--text-muted);
 }
 
-/* Modal Styling */
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(8px);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+.app-footer strong {
+    color: var(--primary-accent);
 }
 
-.modal-content {
-    background: var(--card-bg);
-    backdrop-filter: blur(16px);
-    padding: 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 400px;
-    border: 1px solid var(--border-color);
-}
+/* =========================================================
+   📱 MOBILE & TABLET RESPONSIVE RULES (Prevent Layout Breaking)
+   ========================================================= */
 
-.modal-content h3 { margin-bottom: 8px; }
-.modal-content p { font-size: 13px; color: var(--text-muted); margin-bottom: 15px; }
-
-.modal-content input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    background: rgba(15, 23, 42, 0.8);
-    color: #fff;
-    margin-bottom: 15px;
-    outline: none;
-}
-
-.modal-actions { display: flex; gap: 10px; }
-
-/* 📱 Mobile Responsive Styles */
-@media (max-width: 768px) {
-    .container {
-        grid-template-columns: 1fr;
-    }
-    
-    .rx-card {
-        padding: 20px;
+@media (max-width: 900px) {
+    .main-content {
+        grid-template-columns: 1fr; /* Single Column Layout */
+        gap: 16px;
     }
 
-    .doctor-name { font-size: 16px; }
-    .rx-symbol { font-size: 26px; }
+    .app-header {
+        flex-direction: column;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 16px;
+    }
+
+    .lang-selector {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .prescription-pad {
+        padding: 20px 16px;
+        min-height: auto;
+    }
+
+    .doc-info h2 {
+        font-size: 17px;
+    }
+
+    .rx-symbol {
+        font-size: 30px;
+    }
+
+    .patient-meta {
+        flex-direction: column;
+        gap: 6px;
+    }
 }
 
-/* 🖨️ Print Stylesheet */
+@media (max-width: 480px) {
+    .app-container {
+        padding: 10px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    textarea#diseaseInput {
+        font-size: 14px;
+    }
+}
+
+
+
 @media print {
-    body { 
-        background: white !important; 
-        color: black !important; 
+    body {
+        background: white !important;
+        color: black !important;
     }
-    .navbar, .input-card, .btn-print, .modal { display: none !important; }
-    .container { display: block; width: 100%; margin: 0; padding: 0; }
-    .rx-card { box-shadow: none; border: none; padding: 0; }
+
+    .app-header, 
+    .input-panel, 
+    .app-footer, 
+    .btn-group, 
+    .history-card {
+        display: none !important;
+    }
+
+    .app-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .main-content {
+        display: block !important;
+    }
+
+    .prescription-pad {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        background: white !important;
+    }
 }
