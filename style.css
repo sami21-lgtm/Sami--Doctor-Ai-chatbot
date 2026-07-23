@@ -32,11 +32,10 @@
 body {
     background-color: var(--bg-dark);
     
-    /* 🖼️ ব্যাকগ্রাউন্ড পিকচার সেটিং 
-       ('your-photo.jpg' তুলে দিয়ে আপনার ছবির নাম/পাথ দিন) */
+   
     background-image: 
         linear-gradient(135deg, rgba(9, 13, 22, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%),
-        url('your-photo.jpg'); 
+        url('627058011_915956991347956_7122116475994450660_n.jpg'); 
         
     background-size: cover;
     background-position: center;
