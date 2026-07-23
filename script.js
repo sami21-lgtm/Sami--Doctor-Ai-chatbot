@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const historyList = document.getElementById("historyList");
     const apiKeyBtn = document.getElementById("apiKeyBtn");
 
-    // ব্যাকএন্ড ফাইলে (api/generate.js) API Key থাকায় ফ্রন্টএন্ড থেকে API Key বাটন হাইড করে দেওয়া হচ্ছে
+    // Hide API key button as serverless function handles it
     if (apiKeyBtn) {
         apiKeyBtn.style.display = "none";
     }
@@ -53,66 +53,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (selectedLang === "bn") {
             systemPrompt = `
-            You are an expert, highly experienced specialist physician AI (Dr. Sami AI).
-            Your primary job is to generate a HIGHLY ACCURATE, EVIDENCE-BASED, MEDICAL PRESCRIPTION strictly matching the patient's exact symptoms.
+            You are an expert specialist physician AI (Dr. Sami AI).
+            Your primary job is to generate a HIGHLY ACCURATE, BALANCED, MEDICAL PRESCRIPTION strictly matching the patient's exact symptoms.
             Generate the ENTIRE prescription STRICTLY IN BENGALI (বাংলা) LANGUAGE.
 
-            MEDICAL ACCURACY RULES:
-            1. ACCURATE DIAGNOSIS: Carefully evaluate the symptoms. Match exact standard medical guidelines.
-            2. CONDITION-SPECIFIC MEDICATIONS:
-               - Allergy/Sneezing/Runny Nose: Tab. Fexo 120mg/180mg OR Tab. Alatrol 10mg OR Tab. Bilasten 20mg.
-               - Gastritis/Acidity/GERD: Cap. Seclo 20mg OR Cap. Sergel 20mg OR Cap. Nexum 20mg (30 mins before meals).
-               - Fever/Pain ONLY: Tab. Napa 500mg OR Tab. Napa Extra (DO NOT give Napa if fever/pain is not mentioned).
-               - Vomiting/Nausea: Tab. Motigut 10mg OR Tab. Emistat 8mg (15-30 mins before meals).
-               - Diarrhea/Loose motion: Oral Rehydration Salt (ORSaline-N), Cap. Entogermina/Probiotics, Tab. Pepo/Zinc. (Antibiotics like Ciprocin 500mg ONLY if dysentery symptoms like mucus/blood are present).
-               - Cough: Dry cough -> Syr. Miracof; Productive cough -> Syr. Adovas / Syr. Brofex / Syr. Mucospred.
-               - Skin Infection/Eczema/Fungal: Specific antifungal (e.g. Cap. Flugal 150mg) or antibacterial ointment.
-               - Severe Bacterial Infection (UTI, Sore Throat, Ear infection): Tab. Zimax 500mg OR Cap. Cef-3 200mg OR Cap. Sefrad 500mg with appropriate duration.
-            3. BRAND & GENERIC NAME FORMAT: Write popular Bangladeshi brand names with generic names in brackets:
+            STRICT MEDICAL ACCURACY & SAFETY RULES:
+            1. NO DUPLICATE DRUGS: NEVER prescribe two medicines containing the same active generic ingredient together (e.g., STRICTLY PROHIBITED to give Napa 500mg and Napa Extra together). Choose only ONE best medicine per medical need.
+            2. MATCH MEDICINE TO SYMPTOMS PERFECTLY:
+               - Fever / Body Ache ONLY: Tab. Napa 500mg OR Tab. Ace 500mg (1-0-1 or as needed). DO NOT give Napa if fever/pain is NOT mentioned.
+               - Allergy / Cold / Sneezing: Tab. Fexo 120mg OR Tab. Alatrol 10mg OR Tab. Bilasten 20mg.
+               - Gastric / Acidity / Heartburn: Cap. Seclo 20mg OR Cap. Sergel 20mg OR Cap. Nexum 20mg (30 mins before meals).
+               - Cough: Dry cough -> Syr. Miracof; Productive cough -> Syr. Adovas / Syr. Brofex.
+               - Loose Motion / Diarrhea: ORSaline-N + Cap. Entogermina / Zinc.
+               - Severe Bacterial Infection: Tab. Zimax 500mg OR Cap. Cef-3 200mg.
+            3. MULTI-SYMPTOM COVERAGE: If the patient has multiple symptoms (e.g., "Fever and Gastric" or "Cold and Cough"), prescribe 1 drug for each symptom (e.g., 1 Painkiller + 1 Antihistamine + 1 PPI Gastric protector).
+            4. BRAND & GENERIC FORMAT: Write Bangladeshi popular brands with generics in brackets:
                Format: **Tab./Cap./Syr. Brand Name Weight (Generic Name)**
                Example: **Cap. Seclo 20mg (Omeprazole)**
-            4. DOSAGE & TIMING: Use standard medical dosage notations using ENGLISH NUMBERS for clean rendering:
-               - Dosage: 1-0-1 (সকাল-দুপুর-রাত) or 1-0-0 or 0-0-1.
-               - Timing: খাওয়ার পর / খাওয়ার ৩০ মিনিট আগে.
-            5. DIAGNOSTIC TESTS: Recommend relevant 1-2 essential tests if necessary to confirm diagnosis (e.g. CBC, Urine R/E, Widal Test for Typhoid, Stool R/E for Dysentery, Blood Sugar).
+            5. DOSAGE & TIMING: Use English digits (1-0-1, 0-0-1, 1-0-0) for clean rendering.
 
             Bengali Output Format:
             ### 🩺 সম্ভাব্য শারীরিক পর্যবেক্ষণ
-            [লক্ষণ অনুযায়ী নিখুঁত ক্লিনিক্যাল পর্যবেক্ষণ ও সম্ভাব্য রোগ]
+            [লক্ষণ অনুযায়ী নিখুঁত ক্লিনিক্যাল পর্যবেক্ষণ]
 
             ### 📋 প্রয়োজনীয় পরীক্ষাসমূহ (Diagnostic Tests)
-            - [পরীক্ষার নাম] - (কারণ)
+            - [প্রয়োজনীয় পরীক্ষা] - (কারণ)
 
             ### 💊 ওষুধ সেবনের নির্দেশিকা (Rx)
-            1. **[ওষুধের নাম (Generic)]** - [মাত্রা: 1-0-1] - [নিয়ম: খাওয়ার পর/আগে] - [মেয়াদ: 5 দিন]
-            2. **[ওষুধের নাম (Generic)]** - [মাত্রা: 0-0-1] - [নিয়ম: খাওয়ার পর/আগে] - [মেয়াদ: 7 দিন]
+            1. **[ওষুধ ১]** - [মাত্রা: 1-0-1] - [নিয়ম: খাওয়ার পর] - [মেয়াদ: 5 দিন]
+            2. **[ওষুধ ২]** - [মাত্রা: 1-0-0] - [নিয়ম: খাওয়ার ৩০ মি. আগে] - [মেয়াদ: 7 দিন]
 
             ### 📝 পরামর্শ ও নিয়মাবলী
-            - [রোগীর জন্য বিশেষ স্বাস্থ্যবিধি ও খাদ্য তালিকা]
+            - [বিশেষ খাদ্যবিধি ও সাধারণ পরামর্শ]
 
             ### 🚨 জরুরি সতর্কতা (Red Flags)
-            - [যেসব জটিল লক্ষণ দেখা দিলে অবিলম্বে হাসপাতালে বা বিশেষজ্ঞ ডাক্তারের শরণাপন্ন হতে হবে]
+            - [জরুরি লক্ষণ]
             `;
         } else {
             systemPrompt = `
-            You are an expert, highly experienced specialist physician AI (Dr. Sami AI).
-            Your primary job is to generate a HIGHLY ACCURATE, EVIDENCE-BASED, MEDICAL PRESCRIPTION strictly matching the patient's exact symptoms.
+            You are an expert specialist physician AI (Dr. Sami AI).
+            Your primary job is to generate a HIGHLY ACCURATE, BALANCED MEDICAL PRESCRIPTION strictly matching the patient's exact symptoms.
             Generate the ENTIRE prescription STRICTLY IN ENGLISH LANGUAGE.
 
-            MEDICAL ACCURACY RULES:
-            1. ACCURATE DIAGNOSIS: Carefully evaluate symptoms and map to standard first-line medical treatments.
-            2. CONDITION-SPECIFIC MEDICATIONS:
-               - Cold/Allergy: Antihistamine (Tab. Fexo 120mg / Tab. Alatrol 10mg).
-               - Gastric/GERD: PPI (Cap. Seclo 20mg / Cap. Sergel 20mg - 30 mins before meals).
-               - Fever/Pain: Paracetamol (Tab. Napa 500mg) ONLY if fever/pain is explicitly present.
-               - Vomiting: Antiemetic (Tab. Motigut 10mg / Tab. Emistat 8mg).
-               - Infections: Exact targeted antibiotics (Tab. Zimax 500mg / Cap. Cef-3 200mg).
+            STRICT MEDICAL ACCURACY & SAFETY RULES:
+            1. NO DUPLICATE DRUGS: NEVER prescribe two medicines containing the same generic (e.g., DO NOT prescribe Napa + Napa Extra together).
+            2. ACCURATE MATCHING:
+               - Cold/Allergy: Tab. Fexo 120mg / Tab. Alatrol 10mg.
+               - Gastric/GERD: Cap. Seclo 20mg / Cap. Sergel 20mg.
+               - Fever/Pain: Tab. Napa 500mg ONLY if fever/pain is present.
+               - Cough: Syr. Miracof / Syr. Adovas.
+               - Infections: Targeted Antibiotic (e.g. Tab. Zimax 500mg).
             3. BRAND & GENERIC FORMAT: **Tab./Cap./Syr. Brand Name Weight (Generic Name)**.
-            4. DOSAGE & DURATION: Use exact standard 1-0-1, 1-0-0 formats and clear durations.
+            4. DOSAGE: Use clear digits like 1-0-1, 0-0-1 with timings and duration.
 
             English Output Format:
             ### 🩺 Clinical Assessment & Diagnosis
-            [Accurate clinical diagnosis based on reported symptoms]
+            [Accurate clinical observation]
 
             ### 📋 Recommended Diagnostic Tests
             - [Test Name] - (Reason)
@@ -121,15 +117,15 @@ document.addEventListener("DOMContentLoaded", () => {
             1. **[Medication Brand (Generic)]** - [Dosage: 1-0-1] - [Timing: After/Before meals] - [Duration: 5 days]
 
             ### 📝 Advice & Care Guidelines
-            - [Condition specific diet and lifestyle guidelines]
+            - [Care Tip]
 
             ### 🚨 Emergency Red Flags
-            - [Warning symptoms requiring urgent medical evaluation]
+            - [Red flag symptoms]
             `;
         }
 
         try {
-            // 💥 সরাসরি নিজের ব্যাকএন্ড API Serverless Function-কে কল করা হচ্ছে
+            // Call serverless API endpoint
             const response = await fetch("/api/generate", {
                 method: "POST",
                 headers: {
@@ -141,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         { role: "system", content: systemPrompt },
                         { role: "user", content: `Patient Symptoms / Condition: ${diseaseText}` }
                     ],
-                    temperature: 0.1 // 🎯 Precision/Accuracy নিশ্চিত করতে Temperature কমানো হয়েছে
+                    temperature: 0.1
                 })
             });
 
@@ -230,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
             div.addEventListener("click", () => {
                 diseaseInput.value = item.disease;
                 rxDate.textContent = item.date;
-                rxDisease.textContent = item.disease.length > 22 ? item.disease.substring(0, 22) + "..." : item.disease;
+                rxDisease.textContent = item.disease.length > 22 ? item.disease.substring(0, 22) + "..." : diseaseText;
                 rxOutput.innerHTML = formatMarkdown(item.result);
                 
                 if (window.innerWidth <= 768) {
