@@ -1,75 +1,109 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sami Health AI – Medical Assistant | Developed by Md Emtiaz Hossain Sami</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Dr. Sami AI - Digital Prescription System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-image"></div>
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">🩺</div>
-            <div>
-                <div class="sidebar-title">Sami Doctor AI</div>
-                <div class="sidebar-subtitle">Health & Medical Assistant</div>
-            </div>
+    <!-- Header Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <span class="icon">🩺</span>
+            <h1>Dr. Sami <span>AI</span></h1>
         </div>
-        <button class="new-chat-btn" id="newChatBtn">
-            <span>＋</span> New Consultation
-        </button>
-        <div class="conversations-list" id="conversationsList"></div>
-        <div class="sidebar-footer">
-            Developed by <strong>Md Emtiaz Hossain Sami</strong><br>
-            Dept. of Software Engineering<br>
-            <strong>Daffodil International University</strong>
-        </div>
-    </aside>
+        <button id="apiKeyBtn" class="btn-secondary">🔑 API Key</button>
+    </header>
 
-    <!-- Main Chat Area -->
-    <div class="main" id="mainArea">
-        <div class="top-bar">
-            <button class="menu-toggle" id="menuToggle" title="Menu">☰</button>
-            <div class="top-bar-avatar">🩺</div>
-            <div class="top-bar-info">
-                <div class="top-bar-name">Sami Doctor AI</div>
-                <div class="top-bar-status"><span class="status-dot"></span> Online Assistant</div>
-            </div>
-            <button class="voice-toggle-btn" id="voiceToggleBtn" title="Toggle voice response">
-                🔊 Voice Off
-            </button>
-        </div>
-
-        <!-- Messages Container -->
-        <div class="messages-container" id="messagesContainer">
-            <div class="welcome-screen" id="welcomeScreen">
-                <div class="welcome-avatar">👨‍⚕️</div>
-                <div class="welcome-title">আমি আপনার Sami Health AI সহকারী! 🩺</div>
-                <div class="welcome-subtitle">
-                    বাংলা, English বা Banglish-এ আপনার স্বাস্থ্য সম্পর্কিত লক্ষণ বা প্রশ্ন লিখুন।<br>
-                    <small style="color: #f39c12; margin-top: 5px; display: inline-block;">⚠️ এটি কেবল তথ্যমূলক সহায়তার জন্য, চূড়ান্ত চিকিৎসার জন্য ডাক্তারের পরামর্শ নিন।</small>
-                </div>
-                <div class="welcome-suggestions">
-                    <div class="suggestion-chip" data-msg="আমার মাথা ব্যথা করছে">🧠 মাথা ব্যথা (Headache)</div>
-                    <div class="suggestion-chip" data-msg="আমার জ্বর এসেছে">🌡️ জ্বর (Fever)</div>
-                    <div class="suggestion-chip" data-msg="thanda ar kashi hoise">🤧 ঠান্ডা ও কাশি</div>
-                    <div class="suggestion-chip" data-msg="pet betha korle ki korbo">🤢 পেট ব্যথা</div>
-                    <div class="suggestion-chip" data-msg="healthy diet tips bangla">🥗 স্বাস্থ্যকর ডায়েট</div>
+    <!-- Main Container -->
+    <main class="container">
+        
+        <!-- Left Column: Input & Controls -->
+        <section class="input-card">
+            <h2>Patient Symptoms & Condition</h2>
+            <p class="subtitle">Enter disease details or medical symptoms below</p>
+            
+            <textarea id="diseaseInput" placeholder="e.g. High fever for 3 days, dry cough, severe headache..."></textarea>
+            
+            <!-- Language Selector for Output -->
+            <div class="lang-selector">
+                <label class="lang-label">Prescription Language:</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="rxLang" value="bn" checked>
+                        <span>বাংলা (Bengali)</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rxLang" value="en">
+                        <span>English</span>
+                    </label>
                 </div>
             </div>
-        </div>
 
-        <!-- Input Area -->
-        <div class="input-area">
-            <div class="input-wrapper">
-                <textarea id="userInput" rows="1" placeholder="আপনার স্বাস্থ্য সমস্যা বা লক্ষণ লিখুন..."></textarea>
-                <button class="mic-btn" id="micBtn" title="ভয়েস ইনপুট">🎤</button>
-                <button class="send-btn" id="sendBtn" title="পাঠান">➤</button>
+            <div class="action-btns">
+                <button id="generateBtn" class="btn-primary">⚡ Generate Prescription</button>
+                <button id="newRxBtn" class="btn-reset">🔄 Reset</button>
+            </div>
+
+            <div id="loader" class="loader" style="display: none;">
+                <div class="spinner"></div>
+                <p>Dr. Sami AI is analyzing & generating prescription...</p>
+            </div>
+
+            <!-- Local History -->
+            <div class="history-section">
+                <h3>📜 Recent History</h3>
+                <div id="historyList" class="history-list"></div>
+            </div>
+        </section>
+
+        <!-- Right Column: Digital Prescription Output -->
+        <section class="rx-card" id="prescriptionPrintArea">
+            <!-- Rx Header -->
+            <div class="rx-header">
+                <div>
+                    <h2 class="doctor-name">Dr. Sami AI (Medical Assistant)</h2>
+                    <p class="doctor-sub">MBBS, FCPS (AI Clinical Medicine) | Digital Healthcare</p>
+                </div>
+                <div class="rx-symbol">Rx</div>
+            </div>
+
+            <!-- Patient Info Bar -->
+            <div class="patient-info">
+                <div><strong>Condition:</strong> <span id="rxDisease">--</span></div>
+                <div><strong>Date:</strong> <span id="rxDate">--/--/----</span></div>
+            </div>
+
+            <!-- Prescription Details -->
+            <div id="rxOutput" class="rx-body">
+                <div class="placeholder-text">
+                    👈 Enter symptoms on the left, select your preferred language, and click <strong>"Generate Prescription"</strong>.
+                </div>
+            </div>
+
+            <!-- Footer Disclaimer -->
+            <div class="rx-footer">
+                <p>⚠️ <strong>Medical Disclaimer:</strong> This digital prescription is AI-generated for general guidance. Consult a registered physician for serious emergencies.</p>
+            </div>
+
+            <!-- Print Button -->
+            <button id="printBtn" class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        </section>
+
+    </main>
+
+    <!-- API Key Input Modal Popup -->
+    <div id="apiModal" class="modal">
+        <div class="modal-content">
+            <h3>🔑 Configure Groq API Key</h3>
+            <p>Enter your free Groq API Key (`gsk_...`). It will be securely stored in your browser's local storage.</p>
+            <input type="password" id="apiKeyInput" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx">
+            <div class="modal-actions">
+                <button id="saveKeyBtn" class="btn-primary">Save Key</button>
+                <button id="closeModalBtn" class="btn-secondary">Close</button>
             </div>
         </div>
     </div>
